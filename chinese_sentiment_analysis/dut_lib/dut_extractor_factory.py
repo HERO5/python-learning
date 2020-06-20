@@ -1,12 +1,14 @@
 #!/usr/bin/python
+from importlib import reload
+
 from dut_extractor import DutExtractor
-import thread
+import _thread
 # encoding=utf8
 import sys
 reload(sys)
-sys.setdefaultencoding('utf8')
+# sys.setdefaultencoding('utf8')
 
-lock = thread.allocate_lock()
+lock = _thread.allocate_lock()
 
 class DutExtractorFactory(object):
     single_dut_extractor = None
@@ -21,5 +23,6 @@ class DutExtractorFactory(object):
         return DutExtractorFactory.single_dut_extractor
 
 if __name__ == "__main__":
-    dut_ext = DutExtractorFactory.get_dut_extractor("dut_sentiment_words.csv", "../common_lib/negative_words.txt")
-    print dut_ext
+    # dut_ext = DutExtractorFactory.get_dut_extractor("dut_sentiment_words.csv", "../common_lib/negative_words.txt")
+    dut_ext = DutExtractorFactory.get_dut_extractor("dut_sentiment_words.csv")
+    print(dut_ext)

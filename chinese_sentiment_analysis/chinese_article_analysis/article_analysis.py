@@ -1,8 +1,10 @@
 #!/usr/bin/python
 # encoding=utf8
 import sys
+from importlib import reload
+
 reload(sys)
-sys.setdefaultencoding('utf8')
+#sys.setdefaultencoding('utf8')
 
 import sys
 sys.path.append("../chinese_participation")
@@ -37,7 +39,7 @@ class ArticleAnalysis(object):
     setence_separator_set = set(["。", "？", "！"])
     @staticmethod
     def get_segment_list_from_input_file(file_path):
-        input_file = file(file_path, "r")
+        input_file = open(file_path, "r", encoding="UTF-8")
         segment_list = list()
         segment_partition_list = list()
         line = input_file.readline()
@@ -83,7 +85,9 @@ class ArticleAnalysis(object):
         for segment_result in article_semantic_result:
             for sentence_result in segment_result:
                 for word_result in sentence_result:
-                    if word_result.has_key('meaning') is False:
+                    if (not ("meaning" in word_result)) \
+                            or (not ("semantic_strength" in word_result)) \
+                            or (not ("semantic_polagiry" in word_result)):
                         continue
                     tmp_meaing = meaning_map.get(word_result['meaning'], dict())
                     strength = tmp_meaing.get('strength', 0)
@@ -145,10 +149,13 @@ class ArticleAnalysis(object):
 
 if __name__ == '__main__':
     article_analysis = ArticleAnalysis()
-    result = ArticleAnalysis.string_semantic_analysis("烛花这个电影不很恶心，让人讨厌\n我不讨厌这个电影\n不血腥，不恶心，吃不下饭去\n我不喜欢那种浪漫的电影\n", "dut", "bsa_algorithm")
-    print result['score']
-    print result['score_comment']
+    text = "烛花这个电影不很恶心，让人讨厌\n我不讨厌这个电影\n不血腥，不恶心，吃不下饭去\n我不喜欢那种浪漫的电影\n"
+    text = "这是一段糟糕的旅行"
+    text = "我喜欢你"
+    result = ArticleAnalysis.string_semantic_analysis(text, "dut", "bsa_algorithm")
+    print(result['score'])
+    print(result['score_comment'])
     detail = result['details']
     for item in detail:
-        print item['meaning'], item['strength']
+        print(item['meaning'], item['strength'])
 

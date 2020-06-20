@@ -1,13 +1,15 @@
 #!/usr/bin/python
 # encoding=utf8
 import sys
+from importlib import reload
+
 reload(sys)
-sys.setdefaultencoding('utf8')
+# sys.setdefaultencoding('utf8')
 
 import csv
 import sys
 reload(sys)
-sys.setdefaultencoding('utf8')
+# sys.setdefaultencoding('utf8')
 sys.path.append("../")
 from common import log_tool
 
@@ -17,7 +19,7 @@ class DutExtractor(object):
     def __init__(self, dut_lib_file_path):
         self.word_dict = dict()
         self.negative_word_set = set()
-        with open(dut_lib_file_path,'r') as f:
+        with open(dut_lib_file_path,'r',encoding='UTF-8') as f:
             reader = csv.reader(f)
             for item in reader:
                 word = item[0].encode("UTF-8").strip()
@@ -30,7 +32,8 @@ class DutExtractor(object):
         while counter < len(word_list):
             word = word_list[counter].strip()
             word_semantic_dict = dict({"word" : word})
-            if self.word_dict.has_key(word):
+            # if self.word_dict.has_key(word):
+            if word in self.word_dict:
                 meaning = self.word_dict[word]
                 kind = meaning[3]
                 kind_meaning = self.get_kind_meaning(kind)
@@ -95,7 +98,8 @@ if __name__ == '__main__':
     #dut_extractor = DutExtractor("dut_sentiment_words.csv", "../common_lib/negative_words.txt")
     word_list = list()
     final_word_list = list()
-    sentence = sys.argv[1].strip()
+    # sentence = sys.argv[1].strip()
+    sentence = "这是一个语义测试函数"
     length = len(sentence)
     bit_length = length / 3
     counter = 0
@@ -113,11 +117,12 @@ if __name__ == '__main__':
         final_word_list.append(item)
     result_list = dut_extractor.get_word_semantic(final_word_list)
     for item in result_list:
-        if item.has_key("meaning"):
-            print item["word"], item
+        # if item.has_key("meaning"):
+        if "meaning" in item:
+            print(item["meaning"], item)
         else:
-            print item["word"], item
+            print(item["word"], item)
         for k,v in item.items():
-            print k, v
+            print(k, v)
 
 

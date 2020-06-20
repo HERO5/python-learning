@@ -4,7 +4,7 @@ from algorithm import Algorithm
 
 class BsaAlgorithm(Algorithm):
     def __init__(self, negative_word_file):
-        negative_word_file = file(negative_word_file, "r")
+        negative_word_file = open(negative_word_file, "r", encoding="UTF-8")
         lines = negative_word_file.readlines()
         self.negative_word_set = set()
         for line in lines:
@@ -22,9 +22,12 @@ class BsaAlgorithm(Algorithm):
                 setence_value = 0
                 word_counter = 0
                 for word_result in setence_result:
-                    if word_result.has_key("meaning") is False:
+                    if (not ("meaning" in word_result)) \
+                            or (not ("semantic_strength" in word_result))\
+                            or (not ("semantic_polagiry" in word_result)):
                         word_counter += 1
                         continue
+
                     value = int(word_result["semantic_strength"])
 
                     # TODO check the polarity use the self negative word set, and change the polarity
