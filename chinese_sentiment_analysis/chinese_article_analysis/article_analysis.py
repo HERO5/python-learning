@@ -147,15 +147,15 @@ class ArticleAnalysis(object):
         article_result = ArticleAnalysis.semantic_analysis(segment_partition_list, library, algorithm)
         return article_result
 
-if __name__ == '__main__':
-    article_analysis = ArticleAnalysis()
-    text = "烛花这个电影不很恶心，让人讨厌\n我不讨厌这个电影\n不血腥，不恶心，吃不下饭去\n我不喜欢那种浪漫的电影\n"
-    text = "这是一段糟糕的旅行"
-    text = "我喜欢你"
-    result = ArticleAnalysis.string_semantic_analysis(text, "dut", "bsa_algorithm")
-    print(result['score'])
-    print(result['score_comment'])
-    detail = result['details']
-    for item in detail:
-        print(item['meaning'], item['strength'])
+# if __name__ == '__main__':
+#     article_analysis = ArticleAnalysis()
+#     text = "烛花这个电影不很恶心，让人讨厌\n我不讨厌这个电影\n不血腥，不恶心，吃不下饭去\n我不喜欢那种浪漫的电影\n"
+#     text = "这是一段糟糕的旅行"
+#     text = "我喜欢你"
+#     result = ArticleAnalysis.string_semantic_analysis(text, "dut", "bsa_algorithm")
+#     print(result['score'])
+#     print(result['score_comment'])
+#     detail = result['details']
+#     for item in detail:
+#         print(item['meaning'], item['strength'])
 
