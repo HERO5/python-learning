@@ -1,10 +1,7 @@
 from socket import *
-from time import ctime
-import sys
-sys.path.append("../chinese_article_analysis")
-sys.path.append("../pyserial")
-from article_analysis import ArticleAnalysis
-from pyserial import SerialPort
+
+from chinese_sentiment_analysis.chinese_article_analysis.article_analysis import ArticleAnalysis
+from arduino_control.pyserial.pyserial import SerialPort
 
 stop = b"0"  # 将0转换为ASCII码方便发送
 start = b"1"  # 同理

@@ -1,17 +1,9 @@
 #!/usr/bin/python
 # encoding=utf8
-import sys
-from importlib import reload
-
-reload(sys)
-# sys.setdefaultencoding('utf8')
 
 import csv
-import sys
-reload(sys)
-# sys.setdefaultencoding('utf8')
-sys.path.append("../")
-from common import log_tool
+
+from chinese_sentiment_analysis.common import log_tool
 
 logger = log_tool.Logging.get_logger()
 

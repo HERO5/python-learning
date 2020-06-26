@@ -1,19 +1,9 @@
 #!/usr/bin/python
 # encoding=utf8
-import sys
-from importlib import reload
 
-reload(sys)
-#sys.setdefaultencoding('utf8')
-
-import sys
-sys.path.append("../chinese_participation")
-sys.path.append("../dut_lib/")
-sys.path.append("../algorithms/")
-from jieba_participator import JiebaParticipator
-from dut_extractor import DutExtractor
-from dut_extractor_factory import DutExtractorFactory
-from bsa_algorithm import BsaAlgorithm
+from chinese_sentiment_analysis.chinese_participation.jieba_participator import JiebaParticipator
+from chinese_sentiment_analysis.dut_lib.dut_extractor_factory import DutExtractorFactory
+from chinese_sentiment_analysis.algorithms.bsa_algorithm import BsaAlgorithm
 
 ################################################################
 # 注释：
@@ -104,7 +94,7 @@ class ArticleAnalysis(object):
 
     @staticmethod
     def dut_semantic_analysis(segment_partition_list):
-        dut_extractor = DutExtractorFactory.get_dut_extractor("../dut_lib/dut_sentiment_words.csv")
+        dut_extractor = DutExtractorFactory.get_dut_extractor("D:/code/IdeaProjects/python-learning/chinese_sentiment_analysis/dut_lib/dut_sentiment_words.csv")
         total_semantic_value = 0
         article_semantic_result = list()
         for segment in segment_partition_list:
@@ -127,7 +117,7 @@ class ArticleAnalysis(object):
 
     @staticmethod
     def bsa_algorithm_cal(article_semantic_result):
-        bsa_algorithm = BsaAlgorithm("../common_lib/negative_words.txt")
+        bsa_algorithm = BsaAlgorithm("D:/code/IdeaProjects/python-learning/chinese_sentiment_analysis/dut_lib/dut_sentiment_words.csv")
         article_semantic_result = bsa_algorithm.cal_semantic_value(article_semantic_result)
         return article_semantic_result
 

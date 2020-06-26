@@ -1,12 +1,8 @@
 #!/usr/bin/python
-from importlib import reload
-
-from dut_extractor import DutExtractor
-import _thread
 # encoding=utf8
-import sys
-reload(sys)
-# sys.setdefaultencoding('utf8')
+
+from chinese_sentiment_analysis.dut_lib.dut_extractor import DutExtractor
+import _thread
 
 lock = _thread.allocate_lock()
 
