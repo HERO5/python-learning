@@ -16,14 +16,17 @@
 #             pyautogui.scroll(30) # scroll up 10 "clicks"
 #         time.sleep(0.1)
 
-import numpy as np
-import cv2
-from threading import Event
-import re
 import math
-import time
-import random
 import os
+import time
+
+import cv2
+import numpy as np
+
+from arduino_control.tcp_lib.tcp_client import TcpClient
+
+STABILITY = 20
+
 def _remove_background(img):#去除背景
     fgbg = cv2.createBackgroundSubtractorMOG2() # 利用BackgroundSubtractorMOG2算法消除背景
     fgmask = fgbg.apply(img)
@@ -102,7 +105,7 @@ def grdetect(array, verbose = False):
             res = 3
         elif ndefects == 3:
             res = 4
-        elif ndefects == 4:
+        elif ndefects >= 4:
             res = 5
     return res;
 
@@ -115,8 +118,9 @@ def game():
     capture = cv2.VideoCapture(0)#打开笔记本的内置摄像头
     cv2.namedWindow("camera",1)
     start_time = time.time()
-    print("给你5秒的时间把手放到方框的位置\n")
+    # print("给你5秒的时间把手放到方框的位置\n")
     res = 0;
+    stability = 0
     while(1):
         ha,img =capture.read()
         #按帧读取视频，ha,img为获取该方法的两个返回值，ha为布尔值，如果读取帧是正确的则返回true
@@ -126,21 +130,35 @@ def game():
         #cv2.putText(img,str(int((10-(end_time- start_time)))), (100,100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         #对应参数为图片、添加的文字，左上角图标，字体，字体大小，颜色，即上面一行功能为在图片中显示倒计时
         cv2.imshow("camera",img)
-        if(end_time-start_time>5):#如果时间到达5秒
-            break
+        # if(end_time-start_time>5):#如果时间到达5秒
+        #     break
         if(cv2.waitKey(30)>=0):
             break
         ha,img = capture.read()
         cv2.imshow("camera",img)
         img = img[0:210,426:640]
         # cv2.imwrite("wif.jpg",img)
-        res = judge(img)
+        _res = judge(img)
+        if _res == res:
+            stability += 1
+        elif _res != res and stability < STABILITY:
+            stability = 0
+            res = _res
+        elif _res != res and stability >= STABILITY:
+            break
+        print(_res, ' ', stability)
     capture.release()
     return res
 
 def main():
+    tcp_cli = TcpClient(host='192.168.43.192', port=80)
+    tcp_cli.connect()
+    res = 0;
     while(1):
         os.system('cls')#清屏
-        res =game()
+        res = game()
+        tcp_cli.send(str(res))
         print(res)
+    tcp_cli.close()
+
 main()

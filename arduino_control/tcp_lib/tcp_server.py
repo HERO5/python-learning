@@ -37,6 +37,9 @@ while True:
         if cmd == 49:
             mSerial.send_data(start)
             continue
+        if cmd == 49:
+            mSerial.send_data(start)
+            continue
         text = str(data, encoding='utf-8')
         print("text: ", text)
 

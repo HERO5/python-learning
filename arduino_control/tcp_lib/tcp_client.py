@@ -23,9 +23,9 @@ class TcpClient:
     def send(self, data):
         if not data:
             return
-        self.connect()
+        # self.connect()
         self.tcpCliSock.send(data.encode('UTF-8'))
-        self.close()
+        # self.close()
 
 if __name__ == '__main__':
     tcpClient = TcpClient(host='192.168.43.192', port=80)
