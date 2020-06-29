@@ -25,7 +25,7 @@ import numpy as np
 
 from arduino_control.tcp_lib.tcp_client import TcpClient
 
-STABILITY = 20
+STABILITY = 10
 
 def _remove_background(img):#去除背景
     fgbg = cv2.createBackgroundSubtractorMOG2() # 利用BackgroundSubtractorMOG2算法消除背景
@@ -105,7 +105,7 @@ def grdetect(array, verbose = False):
             res = 3
         elif ndefects == 3:
             res = 4
-        elif ndefects >= 4:
+        elif ndefects == 4:
             res = 5
     return res;
 
@@ -142,7 +142,7 @@ def game():
         if _res == res:
             stability += 1
         elif _res != res and stability < STABILITY:
-            stability = 0
+            stability = 1
             res = _res
         elif _res != res and stability >= STABILITY:
             break
@@ -151,13 +151,20 @@ def game():
     return res
 
 def main():
-    tcp_cli = TcpClient(host='192.168.43.192', port=80)
+    tcp_cli = TcpClient(host='192.168.43.192', port=9999)
     tcp_cli.connect()
     res = 0;
     while(1):
         os.system('cls')#清屏
         res = game()
-        tcp_cli.send(str(res))
+        if res == 2:
+            tcp_cli.send('0')
+        if res == 3:
+            tcp_cli.send('1')
+        if res == 4:
+            tcp_cli.send('5')
+        elif res == 5:
+            tcp_cli.send('4')
         print(res)
     tcp_cli.close()
 
